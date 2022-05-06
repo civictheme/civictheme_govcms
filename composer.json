@@ -1,6 +1,6 @@
 {
-    "name": "salsadigitalauorg/civic_govcms",
-    "description": "GovCMS adjustments for Civic theme.",
+    "name": "salsadigitalauorg/civictheme-govcms",
+    "description": "GovCMS adjustments for CivicTheme Drupal theme.",
     "type": "drupal-module",
     "license": "proprietary",
     "require": {
