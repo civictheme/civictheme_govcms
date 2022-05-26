@@ -2,6 +2,8 @@
 
 ----
 
+Version: `0.50.6`
+
 ## Other resources
 
 - [CivicTheme Source site](https://github.com/salsadigitalauorg/civictheme_source)
