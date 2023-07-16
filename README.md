@@ -2,7 +2,7 @@
 
 ----
 
-Version: `1.4.6`
+Version: `{{ VERSION }}`
 
 ## How to use
 
