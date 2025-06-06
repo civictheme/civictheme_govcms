@@ -25,6 +25,7 @@ ARG_GOVCMS_MODULE_REF=""
 ARG_SUBTHEME_MACHINE_NAME=""
 ARG_SUBTHEME_HUMAN_NAME=""
 ARG_SUBTHEME_DESCRIPTION=""
+ARG_APPLY_CACHE_PATCH=false
 
 # --- Usage Function ---
 usage () {
@@ -35,7 +36,7 @@ This script automates the setup of CivicTheme, the CivicTheme GovCMS module,
 and a custom subtheme on a GovCMS website.
 
 Usage:
-  $self -c <civictheme_version> -g <govcms_module_ref> -m <subtheme_machine_name> -u "<subtheme_human_name>" -d "<subtheme_description>"
+  $self -c <civictheme_version> -g <govcms_module_ref> -m <subtheme_machine_name> -u "<subtheme_human_name>" -d "<subtheme_description>" [-p]
   $self -h
 
 Options:
@@ -47,15 +48,28 @@ Options:
         Should be alphanumeric lowercase, hyphens allowed. (Required)
   -u    Human-readable name for the new subtheme (e.g., "My Custom Theme"). (Required)
   -d    Description for the new subtheme. (Required)
+  -p    Apply Drupal cache backend patch (optional). This patches LayoutPluginManager
+        to add cache tags for better cache invalidation.
 
 Example:
   $self -c "1.11.0" -g "main" -m "my_gov_theme" -u "My Awesome Gov Theme" -d "A custom subtheme for GovCMS."
+  $self -c "1.11.0" -g "main" -m "my_gov_theme" -u "My Awesome Gov Theme" -d "A custom subtheme for GovCMS." -p
 HELP_USAGE
   exit 2
 }
 
 # --- Finish Function ---
 finish () {
+  # Revert the patch if it was applied
+  if [ "$ARG_APPLY_CACHE_PATCH" = true ]; then
+    echo "[info]: Reverting Drupal cache backend patch..."
+    if docker compose exec php sed -i '50s/setCacheBackend(\$cache_backend, \$type, \['\''config:core.extension'\''\]);/setCacheBackend(\$cache_backend, \$type);/' web/core/lib/Drupal/Core/Layout/LayoutPluginManager.php; then
+      echo "[success]: Drupal cache backend patch reverted."
+    else
+      echo "[warn]: Failed to revert Drupal cache backend patch."
+    fi
+  fi
+  
   echo "[success]: CivicTheme setup process completed!"
   echo "[info]:   CivicTheme Version:         ${ARG_CIVICTHEME_VERSION}"
   echo "[info]:   CivicTheme GovCMS Module Ref: ${ARG_GOVCMS_MODULE_REF}"
@@ -64,13 +78,14 @@ finish () {
 }
 
 # --- Parse Command-Line Options ---
-while getopts 'hc:g:m:u:d:' o; do
+while getopts 'hpc:g:m:u:d:' o; do
   case $o in
     c) ARG_CIVICTHEME_VERSION="$OPTARG" ;;
     g) ARG_GOVCMS_MODULE_REF="$OPTARG" ;;
     m) ARG_SUBTHEME_MACHINE_NAME="$OPTARG" ;;
     u) ARG_SUBTHEME_HUMAN_NAME="$OPTARG" ;;
     d) ARG_SUBTHEME_DESCRIPTION="$OPTARG" ;;
+    p) ARG_APPLY_CACHE_PATCH=true ;;
     h|?) usage ;;
   esac
 done
@@ -106,8 +121,20 @@ echo "[info]:   CivicTheme GovCMS Module Ref: ${ARG_GOVCMS_MODULE_REF}"
 echo "[info]:   Subtheme Machine Name:      ${ARG_SUBTHEME_MACHINE_NAME}"
 echo "[info]:   Subtheme Human Name:        \"${ARG_SUBTHEME_HUMAN_NAME}\""
 echo "[info]:   Subtheme Description:       \"${ARG_SUBTHEME_DESCRIPTION}\""
+echo "[info]:   Apply Cache Patch:          ${ARG_APPLY_CACHE_PATCH}"
 echo "---"
 
+# --- Apply patch if requested ---
+if [ "$ARG_APPLY_CACHE_PATCH" = true ]; then
+  echo "[info]: Applying Drupal cache backend patch..."
+  if docker compose exec php sed -i '50s/\$this->setCacheBackend(\$cache_backend, \$type);/\$this->setCacheBackend(\$cache_backend, \$type, ['\''config:core.extension'\'']);/' web/core/lib/Drupal/Core/Layout/LayoutPluginManager.php; then
+    echo "[success]: Drupal cache backend patch applied."
+  else
+    echo "[error]: Failed to apply Drupal cache backend patch."
+    exit 1
+  fi
+  echo "---"
+fi
 
 # --- 1. Extract CivicTheme ---
 THEME_DOWNLOAD_URL="https://ftp.drupal.org/files/projects/civictheme-${ARG_CIVICTHEME_VERSION}.tar.gz"
