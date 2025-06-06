@@ -9,19 +9,19 @@ This script automates the installation and configuration of CivicTheme, the `civ
 3.  **Docker:** Docker must be running, as `ahoy` typically interacts with Docker containers.
 4.  **`wget` and `tar`:** These command-line utilities must be available in your shell environment where you run the script.
 5.  **Bash:** The script is written for Bash.
+6.  **`curl`:** Required for downloading the script.
+
+### Installation
+
+1.  **Download and Setup the Script:**
+    From your GovCMS project root directory, run:
+    ```bash
+    curl -o setup_civictheme.sh https://raw.githubusercontent.com/IvanZugec/civictheme_govcms/refs/heads/CIVIC-2238-build-govcms-script/scripts/setup_civictheme.sh && chmod +x setup_civictheme.sh
+    ```
 
 ### How to Use
 
-1.  **Save the Script:**
-    Save the script content to a file in your GovCMS project root (or a `scripts` subdirectory), for example, `setup_civictheme.sh`.
-
-2.  **Make it Executable:**
-    Open your terminal, navigate to the directory where you saved the script, and run:
-    ```bash
-    chmod +x setup_civictheme.sh
-    ```
-
-3.  **Run the Script:**
+1.  **Run the Script:**
     Execute the script from your GovCMS project's root directory. You'll need to provide values for all the required arguments.
 
     **Command Structure:**
@@ -43,7 +43,7 @@ This script automates the installation and configuration of CivicTheme, the `civ
   *   `-u "<subtheme_human_name>"`: **(Required)** The human-readable name for your new subtheme. Enclose in quotes if it contains spaces (e.g., "My Custom Site Theme").
   *   `-d "<subtheme_description>"`: **(Required)** A short description for your new subtheme. Enclose in quotes (e.g., "A custom theme for My Awesome GovCMS Project").
 
-4.  **Example:**
+2.  **Example:**
 
     ```bash
     ./setup_civictheme.sh -c "1.11.0" \
@@ -53,7 +53,7 @@ This script automates the installation and configuration of CivicTheme, the `civ
                           -d "Custom theme for the My Gov Project website on GovCMS."
     ```
 
-5.  **View Help:**
+3.  **View Help:**
     For a reminder of the options and usage:
     ```bash
     ./setup_civictheme.sh -h
