@@ -16,7 +16,9 @@ This script automates the installation and configuration of CivicTheme, the `civ
 1.  **Download and Setup the Script:**
     From your GovCMS project root directory, run:
     ```bash
-    curl -o setup_civictheme.sh https://raw.githubusercontent.com/IvanZugec/civictheme_govcms/refs/heads/CIVIC-2238-build-govcms-script/scripts/setup_civictheme.sh && chmod +x setup_civictheme.sh
+    curl -o setup_civictheme.sh \
+      https://raw.githubusercontent.com/IvanZugec/civictheme_govcms/refs/heads/CIVIC-2238-build-govcms-script/scripts/setup_civictheme.sh \
+      && chmod +x setup_civictheme.sh
     ```
 
 ### How to Use
@@ -30,7 +32,8 @@ This script automates the installation and configuration of CivicTheme, the `civ
                           -g <govcms_module_ref> \
                           -m <subtheme_machine_name> \
                           -u "<subtheme_human_name>" \
-                          -d "<subtheme_description>"
+                          -d "<subtheme_description>" \
+                          [-p]
     ```
 
     **Arguments:**
@@ -42,6 +45,7 @@ This script automates the installation and configuration of CivicTheme, the `civ
   *   `-m <subtheme_machine_name>`: **(Required)** The machine-readable name for your new subtheme. Use lowercase letters, numbers, and hyphens/underscores (e.g., "my_custom_site_theme").
   *   `-u "<subtheme_human_name>"`: **(Required)** The human-readable name for your new subtheme. Enclose in quotes if it contains spaces (e.g., "My Custom Site Theme").
   *   `-d "<subtheme_description>"`: **(Required)** A short description for your new subtheme. Enclose in quotes (e.g., "A custom theme for My Awesome GovCMS Project").
+  *   `-p`: **(Optional)** Apply Drupal cache backend patch. This patches LayoutPluginManager to add cache tags for better cache invalidation.
 
 2.  **Example:**
 
@@ -51,6 +55,16 @@ This script automates the installation and configuration of CivicTheme, the `civ
                           -m "my_gov_project_theme" \
                           -u "My Gov Project Theme" \
                           -d "Custom theme for the My Gov Project website on GovCMS."
+    ```
+
+    ```bash
+    ./setup_civictheme.sh \
+      -c "1.11.0" \
+      -g "main" \
+      -m "my_gov_theme" \
+      -u "My Awesome Gov Theme" \
+      -d "A custom subtheme for GovCMS." \
+      -p
     ```
 
 3.  **View Help:**
