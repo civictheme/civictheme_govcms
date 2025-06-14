@@ -225,7 +225,7 @@ ahoy_cli_govcms_script=$(cat <<'EOF'
   DOWNLOAD_URL="$1"
   ARCHIVE_FILENAME="$2"
   EXTRACTED_DIR_NAME="$3"
-  MODULES_DIR="/app/web/themes/custom/civictheme/modules"
+  MODULES_DIR="/app/web/themes/custom/custom/civictheme/modules"
   TARGET_MODULE_DIR_NAME="civictheme_govcms"
 
   echo "[info] (container): Preparing directory: ${MODULES_DIR}"
@@ -276,6 +276,7 @@ ahoy_cli_govcms_script=$(cat <<'EOF'
 
   echo "[info] (container): Removing civictheme_govcms module files..."
   rm -Rf "${TARGET_MODULE_DIR_NAME}"
+  rm -Rf "${MODULES_DIR}"
 
   echo "[success] (container): CivicTheme GovCMS module steps completed."
 EOF
