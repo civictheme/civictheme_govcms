@@ -366,6 +366,34 @@ ahoy_cli_subtheme_script=$(cat <<'EOF'
   fi
   echo "[success] (container): Sub-theme set as default."
 
+  # --- START: NEW BLOCK TO UPDATE LOGO PATHS ---
+  echo "[info] (container): Updating logo paths in sub-theme configuration..."
+
+  CONFIG_NAME="${SUBTHEME_MACHINE_NAME_ARG}.settings"
+  LOGO_BASE_PATH="themes/custom/${SUBTHEME_MACHINE_NAME_ARG}/dist/assets/logos"
+
+  update_logo_path() {
+    local key="$1"
+    local file="$2"
+    echo "[info] (container):   - Setting ${key}"
+    if ! drush config-set -y "${CONFIG_NAME}" "${key}" "${LOGO_BASE_PATH}/${file}"; then
+      echo "[error] (container): Failed to set logo path for ${key}." >&2
+      exit 1
+    fi
+  }
+
+  update_logo_path "components.logo.primary.light.desktop.path" "logo_primary_light_desktop.svg"
+  update_logo_path "components.logo.primary.light.mobile.path" "logo_primary_light_mobile.svg"
+  update_logo_path "components.logo.primary.dark.desktop.path" "logo_primary_dark_desktop.svg"
+  update_logo_path "components.logo.primary.dark.mobile.path" "logo_primary_dark_mobile.svg"
+  update_logo_path "components.logo.secondary.light.desktop.path" "logo_secondary_light_desktop.png"
+  update_logo_path "components.logo.secondary.light.mobile.path" "logo_secondary_light_mobile.png"
+  update_logo_path "components.logo.secondary.dark.desktop.path" "logo_secondary_dark_desktop.png"
+  update_logo_path "components.logo.secondary.dark.mobile.path" "logo_secondary_dark_mobile.png"
+
+  echo "[success] (container): All logo paths successfully updated to point to the sub-theme."
+  # --- END: NEW BLOCK TO UPDATE LOGO PATHS ---
+
 EOF
 )
 
