@@ -62,9 +62,9 @@ This script automates the installation and configuration of CivicTheme, the `civ
    curl -o setup_civictheme.sh \
      https://raw.githubusercontent.com/civictheme/civictheme_govcms/refs/heads/main/scripts/setup_civictheme.sh \
      && chmod +x setup_civictheme.sh
+   ```
 
 **Note:** Download the script to your GovCMS project root directory on your host machine (not inside a Docker container).
-
 
 ## How to Use
 
@@ -79,6 +79,7 @@ This script automates the installation and configuration of CivicTheme, the `civ
                          -u "<subtheme_human_name>" \
                          -d "<subtheme_description>" \
                          [-p]
+   ```
 
 **Note:** Make sure to run the script from your GovCMS project root directory on your host machine (not inside a Docker container).
 
