@@ -47,7 +47,7 @@ class CivicthemeGovcmsCommands extends DrushCommands {
    * - pathauto_patterns
    */
   public function drushCivicthemeGovcmsRemoveConfig(array $options = ['preserve' => NULL]): void {
-    $preserve = (string) ($options['preserve'] ?? '');
+    $options += ['preserve' => ''];
 
     // Removing configs will lead to showing warnings about missing bundles,
     // which are only shown due to dependencies resolution concurrency issues.
@@ -56,7 +56,7 @@ class CivicthemeGovcmsCommands extends DrushCommands {
     $current = $this->output()->getVerbosity();
     $this->output()->setVerbosity(OutputInterface::VERBOSITY_QUIET);
 
-    $this->govcmsManager->civicthemeGovcmsRemoveConfig($preserve);
+    $this->govcmsManager->civicthemeGovcmsRemoveConfig($options['preserve']);
 
     $this->output()->setVerbosity($current);
   }
