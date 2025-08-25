@@ -9,7 +9,7 @@
 #   - You are running this script from the root of your Drupal project.
 #   - `ahoy` is installed and configured for your project.
 #   - Docker and docker compose are installed and running.
-#   - `wget` and `tar` are available.
+#   - `curl` and `tar` are available.
 #   - `npm` is available in the cli container.
 
 # --- Strict Mode ---
@@ -152,7 +152,7 @@ if [ -d "${EXPECTED_EXTRACTED_THEME_DIR}" ]; then
 fi
 
 echo "[info]: Downloading ${THEME_DOWNLOAD_URL}..."
-if ! wget -O "${CUSTOM_THEMES_PATH}/${THEME_ARCHIVE_NAME}" "${THEME_DOWNLOAD_URL}"; then
+if ! curl -L -o "${CUSTOM_THEMES_PATH}/${THEME_ARCHIVE_NAME}" "${THEME_DOWNLOAD_URL}"; then
   echo "[error]: Failed to download CivicTheme from ${THEME_DOWNLOAD_URL}."
   exit 1
 fi
@@ -241,7 +241,7 @@ ahoy_cli_govcms_script=$(cat <<'EOF'
   if [ -d "${EXTRACTED_DIR_NAME}" ]; then rm -rf "${EXTRACTED_DIR_NAME}"; fi
 
   echo "[info] (container): Downloading civictheme_govcms from ${DOWNLOAD_URL}..."
-  if ! wget --quiet -O "${ARCHIVE_FILENAME}" "${DOWNLOAD_URL}"; then
+  if ! curl -L -s -o "${ARCHIVE_FILENAME}" "${DOWNLOAD_URL}"; then
     echo "[error] (container): Failed to download civictheme_govcms from ${DOWNLOAD_URL}." >&2
     exit 1
   fi
